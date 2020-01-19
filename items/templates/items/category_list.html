@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Категории{% endblock %}
+{% block content %}
+
+<div class="row">
+{% for cat in category_list %}
+
+  <div class="col-sm-5 my-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{cat.title}}</h5>
+        <h6>{{cat.item_set.all.first.title}}</h6>
+        <a href="{{ cat.get_absolute_url }}" class="btn btn-primary">Показать объявления</a>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+
+
+
+{% endblock %}

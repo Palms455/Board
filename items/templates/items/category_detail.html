@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}{{category.title}}{% endblock %}
+{% block content %}
+
+  <h6>{{category.item_set.all.first.title}}</h6>
+
+ <img src="{{ category.category.item_set.productphoto_set.first.photo.url }}" class="d-block w-100" alt="...">
+
+
+
+
+    {% endblock %}

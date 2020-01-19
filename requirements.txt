@@ -1,0 +1,4 @@
+django == 3.0
+pillow
+psycopg2
+psycopg2-binary
