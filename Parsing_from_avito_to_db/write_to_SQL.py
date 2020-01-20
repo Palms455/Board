@@ -1,3 +1,4 @@
+
 from peewee import *
 from desktop_avito_parsing import Article
 from simple_avito_to_sql import get_html, get_site_list
@@ -47,9 +48,9 @@ def main():
 	print('connect to db')
 	site_list_all=[]
 	url = 'https://www.avito.ru/rossiya?q=nintendo+wii&p=1'
-	for k in range(1, 4):
+	for k in range(1, 5):
 		urls = f'https://www.avito.ru/rossiya?q=nintendo+wii&p={str(k)}'
-		time.sleep(randint(1,8))
+		time.sleep(randint(3,8))
 		site_list=(get_site_list(get_html(urls)))
 		for site in site_list:
 			site_list_all.append(site)
@@ -57,7 +58,7 @@ def main():
 	print('now, we get site list')
 	for site in  site_list_all:
 		print(site)
-		time.sleep(randint(2, 10))
+		time.sleep(randint(4, 10))
 		p = Article(site)
 		try:
 			owner = Items_Seller.get(title = p.data['seller'])

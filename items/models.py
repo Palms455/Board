@@ -22,8 +22,8 @@ class Category(models.Model):
 		return reverse('category_detail_url', kwargs={'pk':self.pk})
 
 class Item(models.Model):
-	title = models.CharField('Название', max_length=150)
-	description = models.TextField(blank=True)
+	title = models.CharField('Название', max_length=150, db_index=True)
+	description = models.TextField(blank=True,db_index=True)
 	seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
 	price = models.IntegerField('Цена товара', blank=True)
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)

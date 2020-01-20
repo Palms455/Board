@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Item, Category, Seller
+from .models import *
 from django.views.generic.base import View
 from django.views.generic import ListView, DetailView
 
@@ -8,10 +8,14 @@ class CategoryList(ListView):
 	'''list of categories'''
 	model = Category
 
-class CategoryDetail(DetailView):
+
+class CategoryDetail(View):
 	'''description category'''
-	model = Category
-	query_set = Category.objects.all
+	def get(self, request, pk):
+		model = Category.objects.get(id=pk)
+
+		data = model.item_set.all()
+		return render(request, 'items/category_detail.html', context = {'data' : data, 'category': model})
 
 class ItemList(ListView):
 	'''list of items'''

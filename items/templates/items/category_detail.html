@@ -1,13 +1,41 @@
 {% extends 'base.html' %}
 
 {% block title %}{{category.title}}{% endblock %}
+
+
 {% block content %}
 
-  <h6>{{category.item_set.all.first.title}}</h6>
-
- <img src="{{ category.category.item_set.productphoto_set.first.photo.url }}" class="d-block w-100" alt="...">
 
 
+<h2>{{category.title}}</h2>
 
+
+<div class="card-columns">
+  {% for item in data %}
+  <div class="col mb-4 mt-2">
+    <div class="card text-white bg-dark mt-3">
+      <img src="{{ item.productphoto_set.first.photo.url }}" class="card-img-top img-thumbnail" alt="...">
+      <div class="card-body">
+        <h5 class="card-title"><a href="{{ item.get_absolute_url  }}" >{{item.title}}</a></h5>
+        <p class="card-text">{{item.description| truncatewords:15}}</p>
+        <p> Цена: {{item.price}} руб.</p>
+        
+        <p class='card-text'><a href="{{ item.get_absolute_url  }}" class="btn btn-primary">Подробности</a></p>
+    
+      </div>
+      <div class="card-footer ">
+          <div class="row">
+            <div class="col">
+              <p>{{item.date_pub}}</p>
+            </div>
+          <div class="col">
+            <a href="item.category.title.get_absolute_url">{{ item.category.title }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
 
     {% endblock %}
