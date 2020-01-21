@@ -85,5 +85,32 @@ class CategoryForm(forms.ModelForm):
         	return new_cat
         
 
-class ItemForm(forms.Form):
-	pass
+class ItemForm(forms.ModelForm):
+
+    class Meta:
+	
+        model = Item
+        fields = ['title', 'description', 'seller', 'price', 'category', 'adress' ]
+        widgets = {
+            'title' : forms.TextInput(attrs={'placeholder': 'Название','class' : 'form-control'}),
+            'description' : forms.Textarea(attrs={'placeholder': 'Описание','class' : 'form-control'}),
+            'seller' : forms.SelectMultiple(attrs={'placeholder': 'Продавец','class' : 'form-control'}),
+            'price' : forms.TextInput(attrs={'placeholder': 'Стоимость','class' : 'form-control'}),
+            'category' : forms.SelectMultiple(attrs={'placeholder': 'Выберите категорию','class' : 'form-control'}),
+            'adress' : forms. TextInput(attrs={'placeholder': 'Адрес','class' : 'form-control'})
+            }
+
+class PhotoForm(forms.Form):
+    photo = forms.CharField(max_length=150, widget=forms.TextInput(attrs={'placeholder': 'Write new category','class': 'form-control'}))
+
+    def save(self, id):
+        new_photo = ProductPhoto.objects.create(photo=self.cleaned_data['photo'], product = id)
+        return new_photo    
+''' 
+ class Meta:
+        model = ProductPhoto
+        fields = ['photo' , 'product']
+        widgets = {
+        'photo' : forms.TextInput()
+        }
+    '''

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import *
 from django.views.generic.base import View
 from django.views.generic import ListView, DetailView
-from .forms import CategoryForm
+from .forms import CategoryForm, ItemForm, PhotoForm
 from django.shortcuts import redirect
 
 
@@ -47,6 +47,23 @@ class AddCategory(View):
 
 		if cat.is_valid(): #проверяем валидность данных
 			new_cat = cat.save()
+			print(new_cat.id)
 			return redirect(new_cat) # отправляем на страницу с категорией	
 
 		return render(request, 'items/add_category.html', context={'form' : cat })
+
+class AddItem(View):
+
+	def get(self, request):
+		form = ItemForm()
+		photo = PhotoForm()
+		return render(request, 'items/add_item.html', context = {'form': form, 'photo': photo})
+
+	def post(self, request):
+		item = ItemForm(request.POST)
+		photo = PhotoForm(request.POST)
+		if item.is_valid():
+			new_item = item.save()
+			new_photo = photo.save(new_item.id)
+			return redirect(new_item)
+		return render(request, 'items/add_item.html', context = {'form': item, 'photo': photo})
