@@ -1,9 +1,11 @@
 from django.db import models
 from django.shortcuts import reverse
+
 # Create your models here.
 
 class Seller(models.Model):
 	title = models.CharField('Продавец', max_length=150, unique=True)
+	email = models.EmailField('email', blank=True, unique= True )
 
 	def __str__(self):
 		return self.title

@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from .models import *
 from django.views.generic.base import View
 from django.views.generic import ListView, DetailView
+from .forms import CategoryForm
+from django.shortcuts import redirect
+
 
 # Create your views here.
 class CategoryList(ListView):
@@ -34,3 +37,16 @@ class SellerDetail(DetailView):
 	'''description seller'''
 	model = Seller
 
+class AddCategory(View):
+	def get(self, request):
+		form = CategoryForm()
+		return render(request, 'items/add_category.html', context={'form': form})
+
+	def post(self, request):
+		cat = CategoryForm(request.POST)
+
+		if cat.is_valid(): #проверяем валидность данных
+			new_cat = cat.save()
+			return redirect(new_cat) # отправляем на страницу с категорией	
+
+		return render(request, 'items/add_category.html', context={'form' : cat })
