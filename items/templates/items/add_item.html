@@ -4,21 +4,22 @@
 
 {% block content %}
 
-<form action="{% url 'add_item_url' %}" method="post">
+<form action="{% url 'add_item_url' %}" method="post" enctype="multipart/form-data">
 
 	{% csrf_token %}
 	
-	<div class="form-group">
+	<div class="form-group" enctype=«multipart/form-data»>
     {% for field in form %}
     {{field.label}}
     {{field}}
     {% endfor %}
-    {{image.label}}
-    {{image.photo}}
-    
+    <form method="post" enctype="multipart/form-data">
+ {{image.photo}}
+</form>
+    <p></p>
   <button type="submit" class="btn btn-outline-success mt-2">	Добавить Объявление</button>
 
-
+</div>
 
 </form>
 

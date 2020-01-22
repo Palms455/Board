@@ -1,6 +1,7 @@
 from django import forms
 from .models import Category, Item, ProductPhoto, Seller
 from django.core.exceptions import ValidationError
+from django.forms import formset_factory
 
 ''' класс формы соотвествуют полям модели '''
 
@@ -99,29 +100,17 @@ class ItemForm(forms.ModelForm):
 
 
 
-class PhotoForm(forms.Form):
-    photo = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Write new category','class': 'form-control'}))
+class PhotoForm(forms.ModelForm):
+    #photo = forms.ImageField(label=u'Фотографии', widget=forms.FileInput(attrs={'multiple': 'multiple'})) # усли надо выбрать много файлов
 
-    def clean_photo(self): # для валидации полей clean_имя поля 
-    	new_cat = self.cleaned_data['photo']
-    	return new_cat
 
-    def save(self, id):
-        new_photo = ProductPhoto.objects.create(photo=self.cleaned_data['photo'], product = id)
-        return new_photo  
+    class Meta:
+        model = ProductPhoto
+        fields = ['photo']
+
+        #def save(self, id):
+        #    new_photo = ProductPhoto.objects.create(photo=self.cleaned_data['photo'], product = id)
+        #    return new_photo  
     
 
-
-
-
-
-
-''' 
-
- class Meta:
-        model = ProductPhoto
-        fields = ['photo' , 'product']
-        widgets = {
-        'photo' : forms.TextInput()
-        }It
-    '''
+https://stackoverflow.com/questions/34006994/how-to-upload-multiple-images-to-a-blog-post-in-django
