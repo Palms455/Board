@@ -61,11 +61,7 @@ class CategoryForm(forms.Form):
                 
             }
         ))
-    def clean_title(self): # для валидации полей clean_имя поля 
-    	new_cat = self.cleaned_data['title']
-    	if Category.objects.filter(title__iexact=new_cat).count():
-    		raise ValidationError('Такая категория уже есть')
-    	return new_cat
+   
 
     def save(self):
     	new_category = Category.objects.create(title=self.cleaned_data['title'])
@@ -88,29 +84,44 @@ class CategoryForm(forms.ModelForm):
 class ItemForm(forms.ModelForm):
 
     class Meta:
-	
         model = Item
+        category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label=None, to_field_name="title")
+        seller =forms.ModelChoiceField(queryset=Seller.objects.all(), empty_label=None, to_field_name="title")
         fields = ['title', 'description', 'seller', 'price', 'category', 'adress' ]
         widgets = {
             'title' : forms.TextInput(attrs={'placeholder': 'Название','class' : 'form-control'}),
             'description' : forms.Textarea(attrs={'placeholder': 'Описание','class' : 'form-control'}),
-            'seller' : forms.SelectMultiple(attrs={'placeholder': 'Продавец','class' : 'form-control'}),
-            'price' : forms.TextInput(attrs={'placeholder': 'Стоимость','class' : 'form-control'}),
-            'category' : forms.SelectMultiple(attrs={'placeholder': 'Выберите категорию','class' : 'form-control'}),
+            
+            'price' : forms.NumberInput(attrs={'placeholder': 'Стоимость','class' : 'form-control'}),
+           
             'adress' : forms. TextInput(attrs={'placeholder': 'Адрес','class' : 'form-control'})
             }
 
+
+
 class PhotoForm(forms.Form):
-    photo = forms.CharField(max_length=150, widget=forms.TextInput(attrs={'placeholder': 'Write new category','class': 'form-control'}))
+    photo = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Write new category','class': 'form-control'}))
+
+    def clean_photo(self): # для валидации полей clean_имя поля 
+    	new_cat = self.cleaned_data['photo']
+    	return new_cat
 
     def save(self, id):
         new_photo = ProductPhoto.objects.create(photo=self.cleaned_data['photo'], product = id)
-        return new_photo    
+        return new_photo  
+    
+
+
+
+
+
+
 ''' 
+
  class Meta:
         model = ProductPhoto
         fields = ['photo' , 'product']
         widgets = {
         'photo' : forms.TextInput()
-        }
+        }It
     '''

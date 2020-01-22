@@ -4,6 +4,7 @@ from django.views.generic.base import View
 from django.views.generic import ListView, DetailView
 from .forms import CategoryForm, ItemForm, PhotoForm
 from django.shortcuts import redirect
+import datetime
 
 
 # Create your views here.
@@ -57,13 +58,17 @@ class AddItem(View):
 	def get(self, request):
 		form = ItemForm()
 		photo = PhotoForm()
-		return render(request, 'items/add_item.html', context = {'form': form, 'photo': photo})
+		return render(request, 'items/add_item.html', context = {'form': form, 'image': photo })
 
 	def post(self, request):
-		item = ItemForm(request.POST)
+		its = ItemForm(request.POST)
 		photo = PhotoForm(request.POST)
-		if item.is_valid():
-			new_item = item.save()
-			new_photo = photo.save(new_item.id)
+		if its.is_valid() and photo.is_valid():
+			print('saving')
+			new_item = its.save(commit=False)
+			new_item.date_pub=datetime.datetime.now()
+			new_item.save()
+			new_photo = photo.save(new_item)
 			return redirect(new_item)
-		return render(request, 'items/add_item.html', context = {'form': item, 'photo': photo})
+		print(its.errors)
+		return render(request, 'items/add_item.html', context = {'form': its, 'image': photo})
