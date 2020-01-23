@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import *
 from django.views.generic.base import View
 from django.views.generic import ListView, DetailView, FormView
-from .forms import CategoryForm, ItemForm, PhotoForm,PhotoFormSet
+from .forms import CategoryForm, ItemForm, PhotoForm,PhotoFormSet, UPhotoFormSet
 from django.shortcuts import redirect
 import datetime
 from django.core.files.base import ContentFile
@@ -115,9 +115,51 @@ class CategoryUpdate(View):
 		category = Category.objects.get(id = pk)
 		category_form = CategoryForm(instance=category)
 		return render(request, 'items/category_update_form.html', context={'form': category_form, 'category': category })
-		
+	
+	def post(self, request, pk):
+		category = Category.objects.get(id=pk)
+		cat_form = CategoryForm(request.POST, instance=category)
+
+		if cat_form.is_valid():
+			new_cat = cat_form.save()
+			return redirect(new_cat)
+		return render(request, 'items/category_update_form.html', context={'form': cat_form, 'category': category })
 
 class ItemUpdate(View):
-	pass
+
+	def get(self, request, pk):
+		item = Item.objects.get(id=pk)
+		new_item = ItemForm(instance=item)
+		image = ProductPhoto.objects.filter(product = item)
+		#formset = UPhotoFormSet(queryset = image)
+		formset = PhotoForm(instance=image)
+		return render(request, 'items/update_item.html', context = {'new_item': new_item, 'formset': formset, 'item': item })
+
+
+
+
+	def post(self, request, pk):
+		item = Item.objects.get(id=pk)
+		new_item = ItemForm(instance = item)
+		formset = UPhotoFormSet(request.POST, request.FILES, queryset=ProductPhoto.objects.filter(product = item))
+
+		if new_item.is_valid() and formset.is_valid():
+			item = new_item.save(commit=False)
+			#item.user = request.user
+			item.save()
+
+			for form in formset.cleaned_data:
+				#this helps to not crash if the user   
+				#do not upload all the photos
+				if form:
+					image = form['photo']
+					photo = ProductPhoto(product=item, photo=image)
+					photo.save()
+				messages.success(request,
+                             "Yeeew, check it out on the home page!")
+			return redirect(item)
+		else:
+			print(new_item.errors, formset.errors)
+			return render(request, 'items/update_item.html', context = {'new_item': new_item, 'formset': formset})
 
 

@@ -110,6 +110,7 @@ class PhotoForm(forms.ModelForm):
         fields = ['photo']
 
 PhotoFormSet = modelformset_factory(ProductPhoto,form=PhotoForm, extra=3)
+UPhotoFormSet = modelformset_factory(ProductPhoto,form=PhotoForm, extra=0)
         #def save(self, id):
         #    new_photo = ProductPhoto.objects.create(photo=self.cleaned_data['photo'], product = id)
         #    return new_photo  

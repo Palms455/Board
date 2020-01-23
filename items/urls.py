@@ -8,10 +8,10 @@ urlpatterns = [
     path('category/', CategoryList.as_view(), name= 'category_list_url'),
     path('category/<int:pk>/', CategoryDetail.as_view(), name='category_detail_url'),
     path('item/<int:pk>/', ItemDetail.as_view(), name= 'item_detail_url'),
+    path('item/<int:pk>/update/', ItemUpdate.as_view(), name= 'update_item_url'),
     path('seller/<int:pk>/', SellerDetail.as_view(), name= 'seller_detail_url'),
     path('addcategory/', AddCategory.as_view(), name='add_category_url'),
     path('additem/', AddItem.as_view(), name='add_item_url'),
-    path('item_update/', ItemUpdate.as_view(), name='item_update_url'),
     path('category/<int:pk>/update/', CategoryUpdate.as_view(), name='category_update_url')
 ]
 
