@@ -1,6 +1,7 @@
 from django.db import models
 from django.shortcuts import reverse
 
+
 # Create your models here.
 
 class Seller(models.Model):
@@ -41,7 +42,7 @@ class Item(models.Model):
 
 
 class ProductPhoto(models.Model):
-	photo = models.ImageField(upload_to='item_photo/')
+	photo = models.ImageField(upload_to='item_photo/',verbose_name='Image')
 	product = models.ForeignKey(Item, on_delete=models.CASCADE)
 	
 

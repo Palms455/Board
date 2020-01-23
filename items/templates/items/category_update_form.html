@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Редактирование Категории '{{category.title|title}}'' {{item.title}} {% endblock %}
+{% block content %}
+	<form action='{% url "category_update_url" pk=category.pk %}' method="post">
+	{% csrf_token %}
+	{%  if form.errors %}
+	<div class="alert alert-danger">
+	{{form.errors}}
+	</div>
+	{% endif %}
+	
+		{{form.label}}
+		
+		{{ form.title}}
+	
+
+
+
+	<button type="submit" class="btn btn-outline-success mt-2">	Update Category</button>
+</form>
+
+
+{% endblock %}

@@ -2,6 +2,7 @@ from django import forms
 from .models import Category, Item, ProductPhoto, Seller
 from django.core.exceptions import ValidationError
 from django.forms import formset_factory
+from django.forms import modelformset_factory
 
 ''' класс формы соотвествуют полям модели '''
 
@@ -103,14 +104,15 @@ class ItemForm(forms.ModelForm):
 class PhotoForm(forms.ModelForm):
     #photo = forms.ImageField(label=u'Фотографии', widget=forms.FileInput(attrs={'multiple': 'multiple'})) # усли надо выбрать много файлов
 
-
+    photo = forms.ImageField(label='Image') 
     class Meta:
         model = ProductPhoto
         fields = ['photo']
 
+PhotoFormSet = modelformset_factory(ProductPhoto,form=PhotoForm, extra=3)
         #def save(self, id):
         #    new_photo = ProductPhoto.objects.create(photo=self.cleaned_data['photo'], product = id)
         #    return new_photo  
     
 
-https://stackoverflow.com/questions/34006994/how-to-upload-multiple-images-to-a-blog-post-in-django
+ # https://stackoverflow.com/questions/34006994/how-to-upload-multiple-images-to-a-blog-post-in-django

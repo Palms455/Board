@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Создание объявления{% endblock %}
+
+{% block content %}
+
+<div class="  mt-5">
+    <div class='mt-5'>
+        <h3 class='mt-1'>Новое объявление</h3>
+</div>
+</div>
+<form id="post_form"  method="post" action="" enctype="multipart/form-data">
+
+    {% csrf_token %}
+    {% for hidden in new_item.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
+
+    {% for field in new_item %}
+        {{ field }} <br />
+    {% endfor %}
+
+    {{ formset.management_form }}
+    {% for form in formset %}
+        {{ form }}
+    {% endfor %}
+
+
+    <input type="submit" name="submit" value="Submit" />
+</form>
+
+{% endblock %}

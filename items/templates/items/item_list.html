@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Доска объявлений{% endblock %}
 {% block content %}
-
+<div class="mt-5">
 <div class="card-columns">
    {% for item in item_list %}
 {% include 'items/includes/item_cards.html' %}
@@ -9,5 +9,5 @@
 
 </div>
  
-
+</div>
     {% endblock %}
