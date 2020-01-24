@@ -2,7 +2,8 @@ from django import forms
 from .models import Category, Item, ProductPhoto, Seller
 from django.core.exceptions import ValidationError
 from django.forms import formset_factory
-from django.forms import modelformset_factory
+from django.forms import modelformset_factory, inlineformset_factory
+from django.forms import BaseInlineFormSet
 
 ''' класс формы соотвествуют полям модели '''
 
@@ -109,8 +110,8 @@ class PhotoForm(forms.ModelForm):
         model = ProductPhoto
         fields = ['photo']
 
-PhotoFormSet = modelformset_factory(ProductPhoto,form=PhotoForm, extra=3)
-UPhotoFormSet = modelformset_factory(ProductPhoto,form=PhotoForm, extra=0)
+PhotoFormSet = modelformset_factory(ProductPhoto,form=PhotoForm, can_delete=True, extra=3)
+PhotoInlineFormSet = inlineformset_factory(Item, ProductPhoto, fields=('photo',), form=PhotoForm,  max_num=3)
         #def save(self, id):
         #    new_photo = ProductPhoto.objects.create(photo=self.cleaned_data['photo'], product = id)
         #    return new_photo  

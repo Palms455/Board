@@ -24,6 +24,9 @@ class Category(models.Model):
 	def get_absolute_url(self):
 		return reverse('category_detail_url', kwargs={'pk':self.pk})
 
+	def get_delete_url(self):
+		return reverse('category_delete_url', kwargs={'pk':self.pk})
+
 class Item(models.Model):
 	title = models.CharField('Название', max_length=150, db_index=True)
 	description = models.TextField(blank=True,db_index=True)
@@ -38,6 +41,9 @@ class Item(models.Model):
 
 	def get_absolute_url(self):
 		return reverse('item_detail_url', kwargs = {'pk': self.pk})
+
+	def get_delete_url(self):
+		return reverse('item_delete_url', kwargs = {'pk': self.pk})
 
 
 

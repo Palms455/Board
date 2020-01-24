@@ -20,10 +20,14 @@
         {{ field }} <br />
     {% endfor %}
 
+      {{ formset.as_p }}
     {{ formset.management_form }}
+
     {% for form in formset %}
-        {{ form }}
+        {{ form.photo }}
     {% endfor %}
+   
+    
 
 
     <input type="submit" name="submit" value="Submit" />

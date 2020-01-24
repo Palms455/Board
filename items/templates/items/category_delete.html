@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Удаление категории - {{category.title| title}}{% endblock %}
+
+{% block content %}
+
+<form action="{{ category.get_delete_url }}" method="post" >
+{% csrf_token %}
+<h3>Удалить категорию <b>{{category.title|title}}</b>?</h3>
+<a href="{{ category.get_absolute_url }}">Отмена</a>
+<button type='submit' class="btn btn-danger">Удалить</button>
+
+
+
+</form>
+
+{% endblock %}
+

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import *
 from django.views.generic.base import View
 from django.views.generic import ListView, DetailView, FormView
-from .forms import CategoryForm, ItemForm, PhotoForm,PhotoFormSet, UPhotoFormSet
+from .forms import CategoryForm, ItemForm, PhotoForm,PhotoFormSet, PhotoInlineFormSet
 from django.shortcuts import redirect
 import datetime
 from django.core.files.base import ContentFile
@@ -131,8 +131,7 @@ class ItemUpdate(View):
 		item = Item.objects.get(id=pk)
 		new_item = ItemForm(instance=item)
 		image = ProductPhoto.objects.filter(product = item)
-		#formset = UPhotoFormSet(queryset = image)
-		formset = PhotoForm(instance=image)
+		formset = PhotoInlineFormSet(instance = image)
 		return render(request, 'items/update_item.html', context = {'new_item': new_item, 'formset': formset, 'item': item })
 
 
@@ -141,25 +140,45 @@ class ItemUpdate(View):
 	def post(self, request, pk):
 		item = Item.objects.get(id=pk)
 		new_item = ItemForm(instance = item)
-		formset = UPhotoFormSet(request.POST, request.FILES, queryset=ProductPhoto.objects.filter(product = item))
+		formset = PhotoInlineFormSet(request.POST, request.FILES, instance=item)
 
 		if new_item.is_valid() and formset.is_valid():
 			item = new_item.save(commit=False)
 			#item.user = request.user
 			item.save()
-
-			for form in formset.cleaned_data:
-				#this helps to not crash if the user   
-				#do not upload all the photos
-				if form:
-					image = form['photo']
-					photo = ProductPhoto(product=item, photo=image)
-					photo.save()
-				messages.success(request,
-                             "Yeeew, check it out on the home page!")
+			formset.save()
+			#for form in formset.cleaned_data:
+			#	#this helps to not crash if the user   
+			#	#do not upload all the photos
+			#	if form:
+			#		image = form['photo']
+			#		photo = ProductPhoto(product=item, photo=image)
+			#		photo.save()
+			#	messages.success(request,
+            #                 "Yeeew, check it out on the home page!")
 			return redirect(item)
 		else:
 			print(new_item.errors, formset.errors)
 			return render(request, 'items/update_item.html', context = {'new_item': new_item, 'formset': formset})
 
 
+class CategoryDelete(View):
+	def get(self,request, pk):
+		cat = Category.objects.get(id=pk)
+		return render(request, 'items/category_delete.html', context = {'category': cat})
+
+	def post(self, request, pk):
+		cat = Category.objects.get(id=pk)
+		cat.delete()
+		return redirect(reverse('category_list_url'))
+
+
+class ItemDelete(View):
+	def get(self,request, pk):
+		item = Item.objects.get(id=pk)
+		return render(request, 'items/item_delete.html', context = {'category': item})
+
+	def post(self, request, pk):
+		item = Item.objects.get(id=pk)
+		item.delete()
+		return redirect(reverse('item_list_url'))
