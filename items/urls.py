@@ -12,7 +12,7 @@ urlpatterns = [
     path('category/<int:pk>/delete/', CategoryDelete.as_view(), name='category_delete_url'),
     path('', ItemList.as_view(), name='item_list_url' ),
     path('item/<int:pk>/', ItemDetail.as_view(), name= 'item_detail_url'),
-    path('item/<int:pk>/update/', ItemUpdate.as_view(), name= 'update_item_url'),
+    path('item/<int:pk>/update/', ItemUpdate.as_view(), name= 'item_update_url'),
     path('additem/', AddItem.as_view(), name='add_item_url'),
     path('item/<int:pk>/delete/', ItemDelete.as_view(), name='item_delete_url'),
 

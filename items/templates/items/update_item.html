@@ -6,10 +6,10 @@
 
 <div class="  mt-5">
     <div class='mt-5'>
-        <h3 class='mt-5 pt-5'>Редактирование</h3>
+        <h3 class='mt-5 pt-5'>Редактирование - {{item.title|title}}</h3>
 </div>
 </div>
-<form id="post_form"  method="post" action="" enctype="multipart/form-data">
+<form id="post_form"  method="post" action="{{ item.get_update_url }}" enctype="multipart/form-data">
 
     {% csrf_token %}
     {% for hidden in new_item.hidden_fields %}

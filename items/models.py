@@ -1,5 +1,6 @@
 from django.db import models
 from django.shortcuts import reverse
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -31,10 +32,11 @@ class Item(models.Model):
 	title = models.CharField('Название', max_length=150, db_index=True)
 	description = models.TextField(blank=True,db_index=True)
 	seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
-	price = models.IntegerField('Цена товара', blank=True)
+	price = models.IntegerField('Цена товара', blank=True, null=True)
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
 	adress = models.CharField('Адрес', max_length = 250)
 	date_pub = models.DateTimeField(auto_now_add=True)
+	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 	
 	def __str__(self):
 		return self.title
@@ -44,6 +46,9 @@ class Item(models.Model):
 
 	def get_delete_url(self):
 		return reverse('item_delete_url', kwargs = {'pk': self.pk})
+
+	def get_update_url(self):
+		return reverse('item_update_url', kwargs = {'pk': self.pk})
 
 
 

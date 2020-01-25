@@ -176,9 +176,33 @@ class CategoryDelete(View):
 class ItemDelete(View):
 	def get(self,request, pk):
 		item = Item.objects.get(id=pk)
-		return render(request, 'items/item_delete.html', context = {'category': item})
+		return render(request, 'items/item_delete.html', context = {'item': item})
 
 	def post(self, request, pk):
 		item = Item.objects.get(id=pk)
 		item.delete()
 		return redirect(reverse('item_list_url'))
+
+#Authorization
+
+class Login(View):
+	def get(self, request):
+		return render(request, 'items/login.html', {'error' : error})
+
+	def post(self, request):
+		error = ''
+		login = request.POST.get('login')
+		password = request.POST.get('password')
+		url = request.POST.get('continue'. '/')
+		sessid = do_login(login, password) #функция проверки и авторизации
+		if sessid:
+			response = HttpResponseRedirect(url)
+			response.set_cookie('sessid', sessid,
+			domain = '.site.com', httponly=True,
+			expires = datetime.datetime.now() + timedelta(days=5)
+			)
+			return response
+
+		else:
+			error = u'Неверный логин или пароль'
+		return render(request, 'items/login.html', {'error' : error})

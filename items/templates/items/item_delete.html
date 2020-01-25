@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Удаление объявления - {{item.title| title}}{% endblock %}
+
+{% block content %}
+
+<form action="{{ item.get_delete_url }}" class="pt-3" method="post" >
+{% csrf_token %}
+<h3>Удалить объявление <b>{{item.title|title}}</b>?</h3>
+<a href="{{ item.get_absolute_url }}">Отмена</a>
+<button type='submit' class="btn btn-danger">Удалить</button>
+
+
+
+</form>
+
+{% endblock %}
+

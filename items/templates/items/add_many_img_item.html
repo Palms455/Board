@@ -9,15 +9,17 @@
         <h3 class='mt-5 pt-5'>Новое объявление</h3>
 </div>
 </div>
-<form id="post_form"  method="post" action="" enctype="multipart/form-data">
+<form id="post_form"  method="post" action="" enctype="multipart/form-data ">
 
     {% csrf_token %}
     {% for hidden in new_item.hidden_fields %}
         {{ hidden }}
     {% endfor %}
 
-    {% for field in new_item %}
+   {% for field in new_item %}
+    <div class="mt-1">
         {{ field }} <br />
+    </div>
     {% endfor %}
 
     {{ formset.management_form }}
