@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.conf import settings
 from django.urls import path , include
-from .views import ItemList, CategoryList, CategoryDetail, ItemDetail, SellerDetail, AddCategory, AddItem, ItemUpdate, CategoryUpdate, CategoryDelete, ItemDelete
+from .views import ItemList, CategoryList, CategoryDetail, ItemDetail, SellerDetail, AddCategory, AddItem, ItemUpdate, CategoryUpdate, CategoryDelete, ItemDelete, LoginUserView, RegisterUserView, UserLogout      
 
 urlpatterns = [
 	path('seller/<int:pk>/', SellerDetail.as_view(), name= 'seller_detail_url'),
@@ -15,6 +15,9 @@ urlpatterns = [
     path('item/<int:pk>/update/', ItemUpdate.as_view(), name= 'item_update_url'),
     path('additem/', AddItem.as_view(), name='add_item_url'),
     path('item/<int:pk>/delete/', ItemDelete.as_view(), name='item_delete_url'),
+    path('login/', LoginUserView.as_view(), name='login_user_url'),
+    path('register/', RegisterUserView.as_view(), name='register_user_url'),
+    path('logout/', UserLogout.as_view(), name='logout_url'),
 
     
 ]

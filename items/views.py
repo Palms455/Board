@@ -1,13 +1,17 @@
 from django.shortcuts import render, redirect
 from .models import *
 from django.views.generic.base import View
-from django.views.generic import ListView, DetailView, FormView
-from .forms import CategoryForm, ItemForm, PhotoForm,PhotoFormSet, PhotoInlineFormSet
+from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
+from .forms import CategoryForm, ItemForm, PhotoForm,PhotoFormSet, PhotoInlineFormSet, AuthUserForm, RegisterUserForm		
 from django.shortcuts import redirect
 import datetime
 from django.core.files.base import ContentFile
 from django.forms import modelformset_factory
 from django.contrib import messages
+from django.urls import reverse_lazy, reverse
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 
 
 # Create your views here.
@@ -185,24 +189,29 @@ class ItemDelete(View):
 
 #Authorization
 
-class Login(View):
-	def get(self, request):
-		return render(request, 'items/login.html', {'error' : error})
+class LoginUserView(LoginView):
+	template_name = 'items/login.html'
+	form_class = AuthUserForm
+	success_url = reverse_lazy('item_list_url')
+	def get_success_url(self):
+		return self.success_url
 
-	def post(self, request):
-		error = ''
-		login = request.POST.get('login')
-		password = request.POST.get('password')
-		url = request.POST.get('continue'. '/')
-		sessid = do_login(login, password) #функция проверки и авторизации
-		if sessid:
-			response = HttpResponseRedirect(url)
-			response.set_cookie('sessid', sessid,
-			domain = '.site.com', httponly=True,
-			expires = datetime.datetime.now() + timedelta(days=5)
-			)
-			return response
 
-		else:
-			error = u'Неверный логин или пароль'
-		return render(request, 'items/login.html', {'error' : error})
+#Register
+class RegisterUserView(CreateView):
+	model = User
+	template_name = 'items/register.html'
+	form_class	= RegisterUserForm	
+	success_url	= reverse_lazy('item_list_url')
+	success_msg = 'Пользователь зарегистрирован'
+
+	def form_valid(self):
+		form_valid = super().form_valid(form)
+		username = form.cleaned_data['username']
+		password = form.cleaned_data['password']
+		auth_user = authenticate(username = username, password = password)
+		login(self.request, auf_user)
+		return form_valid
+
+class UserLogout(LogoutView):
+	next_page = reverse_lazy('item_list_url')

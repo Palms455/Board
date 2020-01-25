@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Создание объявления{% endblock %}
+
+{% block content %}
+
+<h1 class="mt-5">Авторизация</h1>
+	<div class="container col-6">
+	<form class="add-form" method="post">
+		{% csrf_token %}
+{{form}}	
+<input type="submit" name="submit" value="Submit" /></form>
+</div>	
+
+{% endblock %}

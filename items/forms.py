@@ -4,6 +4,10 @@ from django.core.exceptions import ValidationError
 from django.forms import formset_factory
 from django.forms import modelformset_factory, inlineformset_factory
 from django.forms import BaseInlineFormSet
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
+
+
 
 ''' класс формы соотвествуют полям модели '''
 
@@ -118,3 +122,37 @@ PhotoInlineFormSet = inlineformset_factory(Item, ProductPhoto, fields=('photo',)
     
 
  # https://stackoverflow.com/questions/34006994/how-to-upload-multiple-images-to-a-blog-post-in-django
+
+class AuthUserForm(AuthenticationForm):
+    class Meta:
+        model = User 
+        fields = ('username', 'password')
+        widgets = {
+            'username' : forms.TextInput(attrs={'placeholder': 'Имя пользователя','class' : 'form-control mb-2'}),
+            'password': forms.PasswordInput(attrs={'placeholder': 'Пароль','class' : 'form-control mb-2-2'}),
+            }
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(AuthUserForm, self).__init__(*args, **kwargs)
+
+class RegisterUserForm(forms.ModelForm):
+    class Meta:
+        model= User
+        fields = ('username', 'password','email' ,'first_name', 'last_name')
+       
+        widgets = {
+            'username' : forms.TextInput(attrs={'placeholder': 'Имя пользователя','class' : 'form-control mb-2'}),
+            'password': forms.PasswordInput(attrs={'placeholder': 'Пароль','class' : 'form-control mb-2-2'}),
+            'email' : forms.EmailInput(attrs={'placeholder': 'Имя пользователя','class' : 'form-control mb-2'}),
+            'first_name': forms.TextInput(attrs={'placeholder': 'Пароль','class' : 'form-control mb-2'}),
+            'last_name': forms.TextInput(attrs={'placeholder': 'Пароль','class' : 'form-control mb-2'}),
+        }
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
+
+        

@@ -29,11 +29,18 @@
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0 xs-mt-2 sm-mt-3" type="submit">Найти...</button>
     </form>
-    <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'add_item_url' %}" role="button">Подать объявление</a>
+    <a class="btn btn-outline-success my-2 my-sm-0 mr-2" href="{% url 'add_item_url' %}" role="button">Подать объявление</a>
     <p> </p>
-    <a href="" class="mx-3 ">Войти</a>
+    {% if not request.user.username  %}
+    <a href="{% url 'login_user_url' %}" class=" mx-3 ">Войти</a>
+    <a href="{%  url 'register_user_url' %}" class="mx=3 ">Регистрация</a>
+    {% else %}
+    <a class="btn btn-outline-success my-2 mr-2 my-sm-0" href="{% url 'add_item_url' %}" role="button">{{request.user}}</a>
+    <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'logout_url' %}" role="button">Выйти</a>
+    {% endif %}
     <p> </p>
-    <a href="" class="mx=3 ">Регистрация</a>
+
+    
   </div>
 </nav>
 
