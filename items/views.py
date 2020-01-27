@@ -65,13 +65,13 @@ class AddCategory(View):
 		return render(request, 'items/add_category.html', context={'form' : cat })
 
 
-class AddItem(LoginRequiredMixin ,View):
+class AddItem(LoginRequiredMixin, View):
 	login_url = reverse_lazy('login_user_url')
 
 	def get(self, request):
 		new_item = ItemForm()
 		formset = PhotoFormSet(queryset=ProductPhoto.objects.none())
-		return render(request, 'items/add_many_img_item.html', context = {'new_item': new_item, 'formset': formset })
+		return render(request, 'items/add_many_image_item.html', context = {'new_item': new_item, 'formset': formset })
 
 	'''
 	def post(self, request):
@@ -98,7 +98,7 @@ class AddItem(LoginRequiredMixin ,View):
 		formset = PhotoFormSet(request.POST, request.FILES, queryset=ProductPhoto.objects.none())
 		if new_item.is_valid() and formset.is_valid():
 			item = new_item.save(commit=False)
-			#item.user = request.user
+			item.user = request.user
 			item.save()
 
 			for form in formset.cleaned_data:

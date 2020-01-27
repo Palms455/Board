@@ -31,7 +31,7 @@ class Category(models.Model):
 class Item(models.Model):
 	title = models.CharField('Название', max_length=150, db_index=True)
 	description = models.TextField(blank=True,db_index=True)
-	seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
+	seller = models.ForeignKey(Seller, on_delete=models.CASCADE, blank=True, null=True)
 	price = models.IntegerField('Цена товара', blank=True, null=True)
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
 	adress = models.CharField('Адрес', max_length = 250)

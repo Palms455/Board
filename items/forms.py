@@ -92,13 +92,14 @@ class ItemForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label=None, to_field_name="title")
-        seller =forms.ModelChoiceField(queryset=Seller.objects.all(), empty_label=None, to_field_name="title")
-        fields = ['title', 'description', 'seller', 'price', 'category', 'adress' ]
+        category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label=None, to_field_name="title", )
+        #seller =forms.ModelChoiceField(queryset=Seller.objects.all(), empty_label=None, to_field_name="title")
+        fields = ['title', 'description', 'price', 'category', 'adress' ]
+
         widgets = {
             'title' : forms.TextInput(attrs={'placeholder': 'Название','class' : 'form-control'}),
             'description' : forms.Textarea(attrs={'placeholder': 'Описание','class' : 'form-control'}),
-            
+            #'category': forms.SelectMultiple(attrs={'placeholder': 'Выберите категорию', 'class' : 'form-control' }),
             'price' : forms.NumberInput(attrs={'placeholder': 'Стоимость','class' : 'form-control'}),
            
             'adress' : forms. TextInput(attrs={'placeholder': 'Адрес','class' : 'form-control'})
@@ -113,6 +114,10 @@ class PhotoForm(forms.ModelForm):
     class Meta:
         model = ProductPhoto
         fields = ['photo']
+
+        widgets = {
+            'photo' : forms.FileInput(attrs={'placeholder': 'Изображение товара','class' : 'form-control'})
+        }
 
 PhotoFormSet = modelformset_factory(ProductPhoto,form=PhotoForm, can_delete=True, extra=3)
 PhotoInlineFormSet = inlineformset_factory(Item, ProductPhoto, fields=('photo',), form=PhotoForm,  max_num=3)
