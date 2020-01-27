@@ -12,7 +12,7 @@ from django.urls import reverse_lazy, reverse
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 class CategoryList(ListView):
@@ -62,10 +62,11 @@ class AddCategory(View):
 			new_cat = cat.save()
 			print(new_cat.id)
 			return redirect(new_cat) # отправляем на страницу с категорией	
-
 		return render(request, 'items/add_category.html', context={'form' : cat })
 
-class AddItem(View):
+
+class AddItem(LoginRequiredMixin ,View):
+	login_url = reverse_lazy('login_user_url')
 
 	def get(self, request):
 		new_item = ItemForm()
@@ -129,7 +130,7 @@ class CategoryUpdate(View):
 			return redirect(new_cat)
 		return render(request, 'items/category_update_form.html', context={'form': cat_form, 'category': category })
 
-class ItemUpdate(View):
+class ItemUpdate(LoginRequiredMixin, View):
 
 	def get(self, request, pk):
 		item = Item.objects.get(id=pk)
@@ -166,7 +167,7 @@ class ItemUpdate(View):
 			return render(request, 'items/update_item.html', context = {'new_item': new_item, 'formset': formset})
 
 
-class CategoryDelete(View):
+class CategoryDelete(LoginRequiredMixin, View):
 	def get(self,request, pk):
 		cat = Category.objects.get(id=pk)
 		return render(request, 'items/category_delete.html', context = {'category': cat})
@@ -177,7 +178,7 @@ class CategoryDelete(View):
 		return redirect(reverse('category_list_url'))
 
 
-class ItemDelete(View):
+class ItemDelete(LoginRequiredMixin, View):
 	def get(self,request, pk):
 		item = Item.objects.get(id=pk)
 		return render(request, 'items/item_delete.html', context = {'item': item})
@@ -205,13 +206,14 @@ class RegisterUserView(CreateView):
 	success_url	= reverse_lazy('item_list_url')
 	success_msg = 'Пользователь зарегистрирован'
 
-	def form_valid(self):
+	def form_valid(self, form):
 		form_valid = super().form_valid(form)
 		username = form.cleaned_data['username']
 		password = form.cleaned_data['password']
 		auth_user = authenticate(username = username, password = password)
-		login(self.request, auf_user)
+		login(self.request, auth_user)
 		return form_valid
 
 class UserLogout(LogoutView):
 	next_page = reverse_lazy('item_list_url')
+

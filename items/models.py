@@ -36,7 +36,7 @@ class Item(models.Model):
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
 	adress = models.CharField('Адрес', max_length = 250)
 	date_pub = models.DateTimeField(auto_now_add=True)
-	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='Владелец', blank=True)
 	
 	def __str__(self):
 		return self.title
