@@ -13,6 +13,9 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseForbidden
+
+#https://rizzoma.com/topic/d5c429337bcaa70548fb5aeedee6d92b
 
 # Create your views here.
 class CategoryList(ListView):
@@ -134,13 +137,13 @@ class ItemUpdate(LoginRequiredMixin, View):
 
 	def get(self, request, pk):
 		item = Item.objects.get(id=pk)
+		if request.user != item.user:
+			return HttpResponseForbidden()
 		new_item = ItemForm(instance=item)
 		image = ProductPhoto.objects.filter(product = item)
 		formset = PhotoInlineFormSet(instance = image)
+
 		return render(request, 'items/update_item.html', context = {'new_item': new_item, 'formset': formset, 'item': item })
-
-
-
 
 	def post(self, request, pk):
 		item = Item.objects.get(id=pk)
@@ -181,12 +184,16 @@ class CategoryDelete(LoginRequiredMixin, View):
 class ItemDelete(LoginRequiredMixin, View):
 	def get(self,request, pk):
 		item = Item.objects.get(id=pk)
+		if request.user != item.user:
+			return HttpResponseForbidden()
 		return render(request, 'items/item_delete.html', context = {'item': item})
 
 	def post(self, request, pk):
 		item = Item.objects.get(id=pk)
 		item.delete()
 		return redirect(reverse('item_list_url'))
+
+	
 
 #Authorization
 

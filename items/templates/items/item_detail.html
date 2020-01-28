@@ -39,9 +39,16 @@
 
 	<p>{{item.description}}</p>
 
+  {% if request.user == item.user %}
 
   <a href="{{ item.get_update_url }}"  >Редактировать объявление</a>
   <a href="{{ item.get_delete_url }}" >Удалить объявление</a>
+
+  {% else %}
+<a href="" >Написать продавцу</a>
+
+  {% endif %}
+  
 
 
 {% endblock %}
