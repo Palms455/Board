@@ -35,6 +35,8 @@ class ItemList(ListView):
 	'''list of items'''
 	model = Item
 	queryset = Item.objects.order_by('-date_pub')
+	paginate_by = 10
+
 
 class ItemDetail(DetailView):
 	'''description item'''
